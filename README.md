@@ -55,6 +55,10 @@ docker-compose exec web python manage.py createsuperuser
 
 Доступ к админке: http://localhost/admin/login/?next=/admin/.
 
+## Статус Workflow
+
+https://github.com/catarina.egorova/yamdb_final/actions/workflows/yamdb_workflow.yml
+
 # Руководство к проекту:
 
 ## Регистрация новых пользователей
