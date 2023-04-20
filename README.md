@@ -57,7 +57,7 @@ docker-compose exec web python manage.py createsuperuser
 
 ## Статус Workflow
 
-https://github.com/catarina.egorova/yamdb_final/actions/workflows/yamdb_workflow.yml
+![](https://github.com/catarina.egorova/yamdb_final/actions/workflows/yamdb_workflow.yml)
 
 # Руководство к проекту:
 
