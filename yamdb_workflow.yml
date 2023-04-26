@@ -45,7 +45,6 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             context: ./api_yamdb
-            #  file: ./api_yamdb/Dockerfile
             push: true
             tags: catarinaegorova/api_yamdb
 
@@ -61,6 +60,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            sudo docker pull catarinaegorova/yamdb_final
             sudo docker-compose stop
             sudo docker-compose rm web
             touch .env
