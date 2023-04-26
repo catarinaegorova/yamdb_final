@@ -20,19 +20,27 @@
 - NGINX
 - Docker
     
+## Описание Workflow
 
+# Workflow состоит из четырёх шагов:
+tests
+- Проверка кода на соответствие PEP8, автоматический запуск тестов.
+Push Docker image to Docker Hub
+- Сборка и публикация образа на DockerHub.
+deploy
+- Автоматический деплой на боевой сервер при пуше в главную ветку main.
+send_massage
+- Отправка уведомления в телеграм-чат.
 
 ## Запуск проекта
 
-Клонировать репозиторий:
+# 1. Клонировать репозиторий:
 
 ```sh
-git clone https://github.com/catarinaegorova/infra_sp2.git
+git clone https://github.com/catarinaegorova/yamdb_final.git
 ```
 
-Перейдите в директорию infra_sp2\infra и создайте файл .env:
-
-Шаблон наполнения файла:
+# 2. Добавить Action Secrets
 
 ```sh
 DB_ENGINE=django.db.backends.postgresql # указываем, что работаем с postgresql
@@ -40,20 +48,40 @@ DB_NAME=postgres # имя базы данных
 POSTGRES_USER=username # логин для подключения к базе данных
 POSTGRES_PASSWORD=password # пароль для подключения к БД (установите свой)
 DB_HOST=db # название сервиса (контейнера)
-DB_PORT=5432 # порт для подключения к БД 
+DB_PORT=5432 # порт для подключения к БД
+
+DOCKER_PASSWORD=<пароль DockerHub>
+DOCKER_USERNAME=<имя пользователя DockerHub>
+
+USER=<username для подключения к серверу>
+HOST=<IP сервера>
+PASSPHRASE=<пароль для сервера, если он установлен>
+SSH_KEY=<ваш SSH ключ (для получения команда: cat ~/.ssh/id_rsa)>
+
+TELEGRAM_TO=<ID своего телеграм-аккаунта>
+TELEGRAM_TOKEN=<токен вашего бота>
 ```
-Для запуска приложения перейдите в директорию "infra_sp2\infra" и выполните команды:
+
+# Изменить настройки default.conf в папке infra/nginx/
 
 ```sh
-docker-compose up -d --build
+server_name <server_ip_address>;
 ```
-Для создания суперюзера выполинте команду:
-```sh
-docker-compose exec web python manage.py createsuperuser
-```
-Теперь проект готов к работе и доступен по адресу http://localhost/api/v1.
 
-Доступ к админке: http://localhost/admin/login/?next=/admin/.
+# 4. Подготовить сервер
+
+Установить docker и docker-compose на сервер:
+
+```sh
+sudo apt install docker.io 
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+Выполнить копирование файлов docker-compose.yaml и nginx/default.conf на сервер:
+```sh
+scp infra/docker-compose.yaml <user>@<ip_address>:/home/<user>/docker-compose.yaml
+scp infra/nginx/default.conf <user>@<ip_address>:/home/<user>/nginx/default.conf
+```
 
 ## Статус Workflow
 
@@ -76,6 +104,5 @@ docker-compose exec web python manage.py createsuperuser
 - **Администратор (admin)** — полные права на управление всем контентом проекта. Может создавать и удалять произведения, категории и жанры. Может назначать роли пользователям.
 - **Суперюзер Django** — обладает правами администратора (admin). Даже если изменить пользовательскую роль суперюзера — это не лишит его прав администратора. Суперюзер — всегда администратор, но администратор — не обязательно суперюзер.
 
-## Документация
 
-Полная документация к API доступна после запуска проекта по адресу: http://127.0.0.1:8000/redoc/ 
+Проект доступен по адресу: http://158.160.63.172/api/v1/
