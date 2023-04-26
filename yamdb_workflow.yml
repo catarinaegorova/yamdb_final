@@ -60,7 +60,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull catarinaegorova/yamdb_final
             sudo docker-compose stop
             sudo docker-compose rm web
             touch .env
@@ -70,7 +69,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker-compose up -d 
+            sudo docker-compose up --build -d 
   
   send_message:
     runs-on: ubuntu-latest
